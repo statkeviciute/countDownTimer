@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Countdown Clock</title>
+    <link rel="stylesheet" href='mano/style.css'>
+  </head>
+  <body>
+    <div class="buttons">
+      <div class="button" data-time="20">20 SECS</div>
+      <div class="button" data-time="300">WORK 5</div>
+      <div class="button" data-time="900">QUICK 15</div>
+      <div class="button" data-time="1200">SNACK 20</div>
+      <div class="button" data-time="3600">LUNCH BREAK</div>
+      <form name="customForm" id="custom">
+        <input type="text" name="minutes" placeholder="Enter Minutes">
+      </form>
+    </div>
+
+    <div class="timer">
+      <h1 class="time-left"></h1>
+      <p class="back-at"></p>
+
+    </div>
+
+    <script>
+    const buttons = document.querySelectorAll('.button');
+    var counter;
+
+    function countTime(counterCounter) {
+      clearInterval(counter);
+      const hoursNow = new Date().getHours();
+      const minutesNow = new Date().getMinutes();
+      var countStart = counterCounter;
+      const showTime = document.querySelector('.time-left');
+      showTime.innerHTML = Math.floor(counterCounter/60) + ':' + (counterCounter%60);
+
+
+      const hours = hoursNow + Math.floor(countStart/3600);
+      var minutes = Math.floor(minutesNow + countStart/60);
+      if (minutes> 59) {
+        minutes = minutesNow;
+      }
+
+      const backAt = document.querySelector('.back-at');
+      backAt.innerHTML = "Be Back At: " + hours + ":" + minutes;
+
+      counter = setInterval(function() {
+        var timeLeft = countStart--;
+        if(timeLeft===0) {
+          clearInterval(counter);
+          timeLeft = 0;
+        }
+        const showTime = document.querySelector('.time-left');
+        showTime.innerHTML = Math.floor(timeLeft/60) + ':' + (timeLeft%60);
+      }, 1000);
+    }
+
+    buttons.forEach(button => button.addEventListener('click', function() {
+      countTime(parseFloat(this.dataset.time));
+    }));
+
+    const timeForm = document.querySelector('form');
+
+    timeForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      const userMinutes = parseFloat(this.querySelector('input').value);
+      console.log(userMinutes)
+      countTime(userMinutes*60);
+      this.reset();
+    })
+
+    </script>
+
+
+  </body>
+</html>
